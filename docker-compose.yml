@@ -6,7 +6,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./var/www/html
+      - ./var/www/html:/usr/share/nginx/html
       - ./nginx1.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php1
@@ -16,7 +16,7 @@ services:
     ports:
       - "8081:80"
     volumes:
-      - ./var/www/html
+      - ./var/www/html:/usr/share/nginx/html
       - ./nginx2.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php2
@@ -26,18 +26,20 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./var/www/html
+      - ./var/www/html:/var/www/html
     depends_on:
       - mysql
+    command: /app/initsql.sh
 
   php2:
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./var/www/html
+      - ./var/www/html:/var/www/html
     depends_on:
       - mysql
+    command: /app/initsql.sh
 
   mysql:
     image: mysql:latest
