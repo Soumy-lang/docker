@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  nginx1:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./site1:/var/www/html
+      - ./site1/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - php1
+
+  nginx2:
+    image: nginx
+    ports:
+      - "8081:80"
+    volumes:
+      - ./site2:/var/www/html
+      - ./site2/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - php2
+
+  php1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./site1:/var/www/html
+    depends_on:
+      - mysql
+
+  php2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./site2:/var/www/html
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    environment:
+      ROOT_PASSWORD: rootpassword
+      DB_DATABASE: laraveldb
+      DB_USERNAME: myuser
+      DB_PASSWORD: mypassword
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
