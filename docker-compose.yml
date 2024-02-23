@@ -29,7 +29,6 @@ services:
       - ./var/www/html:/var/www/html
     depends_on:
       - mysql
-    command: /app/initsql.sh
 
   php2:
     build:
@@ -39,7 +38,6 @@ services:
       - ./var/www/html:/var/www/html
     depends_on:
       - mysql
-    command: /app/initsql.sh
 
   mysql:
     image: mysql:latest
